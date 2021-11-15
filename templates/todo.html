@@ -1,0 +1,21 @@
+<h1> this is the todo home page</h1>
+
+<ul>
+    
+    {% for todo_item in all_items %}
+    <li> {{todo_item.content}}
+        <form action="/deleteTodo/{{todo_item.id}}" style = "display:inline;" method="post"> {%csrf_token%}
+            <input type="submit" value="Delete" />
+        </form>
+        <form action="/updateTodo/{{todo_item.id}}" style="display:inline;" method="post"> {%csrf_token%}
+            <input type="text" name="update" />
+            <input type="submit" value="Update" />
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<form action = "/todo/" method="post"> {%csrf_token%}
+    <input type = "text" name = "context"/>
+    <input type = "submit" value = "Add"/>
+</form>
