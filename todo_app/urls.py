@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from todo.views import todoView, add, deleteTodo, updateTodo, update
-
+from todo.views import todoView, addTodo, deleteTodo, updateTodo, update, add
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin', admin.site.urls),
     path('todo/', todoView),
@@ -24,4 +24,7 @@ urlpatterns = [
     path('deleteTodo/<int:todo_id>', deleteTodo),
     path('updateTodo/<int:todo_id>', updateTodo),
     path('update/', update),
+    path('addTodo/', addTodo),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

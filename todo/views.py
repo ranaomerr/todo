@@ -5,14 +5,16 @@ from .models import TodoItem
 
 def todoView(request):
     all_todo_items = TodoItem.objects.all()
+
     return render(request, 'todo.html', {'all_items': all_todo_items})
 
 
-def add(request):
-    new_item = TodoItem(content=request.POST.get('context', ""))
-    new_item.save()
-    # return render(request, 'todo.html', {'all_items': all_todo_items})
-    return HttpResponseRedirect('/todo/')
+def addTodo(request):
+    instanceTodoItem = TodoItem()
+    instanceTodoItem.content = request.POST['insert']
+    instanceTodoItem.save()
+    all_todo_items = TodoItem.objects.all()
+    return render(request, 'todo.html', {'all_items': all_todo_items})
 
 
 def deleteTodo(request, todo_id):
@@ -22,13 +24,17 @@ def deleteTodo(request, todo_id):
 
 
 def updateTodo(request, todo_id):
-    item = TodoItem.objects.get(id=todo_id)
+    update_to = request.POST.get('change')
     item_to_update = TodoItem.objects.filter(
-        id=todo_id).update(content='omer')
-    # item_to_update.save()
+        id=todo_id).update(content=update_to)
     return HttpResponseRedirect('/todo/')
 
 
 def update(request):
     all_todo_items = TodoItem.objects.all()
     return render(request, 'update.html', {'all_items': all_todo_items})
+
+
+def add(request):
+    all_todo_items = TodoItem.objects.all()
+    return render(request, 'add.html', {'all_items': all_todo_items})
