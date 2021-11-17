@@ -15,16 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from todo.views import todoView, addTodo, deleteTodo, updateTodo, update, add
+from django.urls.conf import include
+from todo.views import todoView, addTodo, deleteTodo, updateTodo, update, add, register_user, go_to_signin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
+from django.conf.urls.static import static
+from django.conf.urls import url
+#from mysite.core import views as core_views
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('todo/', todoView),
     path('add/', add),
     path('deleteTodo/<int:todo_id>', deleteTodo),
     path('updateTodo/<int:todo_id>', updateTodo),
     path('update/', update),
     path('addTodo/', addTodo),
+    path('register/', register_user),
+    path('register/', go_to_signin),
 ]
-
+urlpatterns += [path('accounts/', include('django.contrib.auth.urls')), ]
 urlpatterns += staticfiles_urlpatterns()
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
