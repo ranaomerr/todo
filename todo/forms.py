@@ -8,5 +8,12 @@ class DocumentForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
+        model = User
+        fields = ('username', 'email')
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
         model = TodoItem
         fields = ('content', 'description', 'document', )

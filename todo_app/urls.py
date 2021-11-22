@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from todo.views import todoView, addTodo, deleteTodo, updateTodo, update, add, register_user, go_to_signin
+from todo.views import logout, todoView, addTodo, deleteTodo, updateTodo, update, add, register_user, go_to_signin, logout
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
@@ -31,7 +31,7 @@ urlpatterns = [
     path('update/', update),
     path('addTodo/', addTodo),
     path('register/', register_user),
-    path('register/', go_to_signin),
+    path('logout/', logout),
 ]
 urlpatterns += [path('accounts/', include('django.contrib.auth.urls')), ]
 urlpatterns += staticfiles_urlpatterns()
