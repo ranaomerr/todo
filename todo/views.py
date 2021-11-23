@@ -6,6 +6,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from rest_framework.fields import JSONField
+from rest_framework.serializers import Serializer
 from .models import TodoList, UploadImageTest
 from .forms import DocumentForm
 from django.contrib.auth import login, authenticate
@@ -134,6 +135,8 @@ def logout(request):
 
 
 class ImageViewSet(APIView):
+    queryset = TodoList.objects.all()
+    serializer_class = TodoSerializer
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
 

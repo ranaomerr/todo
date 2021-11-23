@@ -8,7 +8,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'my-model/', TodoList, basename='MyModel')
+router.register('todoREST', views.ImageViewSet, basename='djangoREST')
 
 urlpatterns = [
     path('', views.todoOverview, name='todoOverview'),
