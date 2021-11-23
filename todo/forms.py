@@ -1,5 +1,4 @@
 from django import forms
-from .models import TodoItem
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -10,10 +9,3 @@ class DocumentForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email')
-
-
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = TodoItem
-        fields = ('content', 'description', 'document', )

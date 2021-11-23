@@ -14,27 +14,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls.conf import include
-from todo.views import logout, todoView, addTodo, deleteTodo, updateTodo, update, add, register_user, go_to_signin, logout
+from django.urls import path, include
+#from django.urls.conf import include
+from todo.views import logout, todoView, deleteTodo, updateTodo, update, add, register_user, go_to_signin, logout, ImageViewSet
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
+from rest_framework.authtoken.views import obtain_auth_token
 #from mysite.core import views as core_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('todo.urls')),
+
     path('todo/', todoView),
     path('add/', add),
     path('deleteTodo/<int:todo_id>', deleteTodo),
     path('updateTodo/<int:todo_id>', updateTodo),
     path('update/', update),
-    path('addTodo/', addTodo),
+    #path('addTodo/', addTodo),
     path('register/', register_user),
     path('logout/', logout),
+
+
+
 ]
 urlpatterns += [path('accounts/', include('django.contrib.auth.urls')), ]
 urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.STATIC_URL,
+                      document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
