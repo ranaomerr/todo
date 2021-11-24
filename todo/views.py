@@ -1,24 +1,12 @@
-import json
-from django.contrib.auth.forms import UserCreationForm
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
-from django.http.response import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from rest_framework.fields import JSONField
-from rest_framework.serializers import Serializer
-from .models import TodoList, UploadImageTest
 from .forms import DocumentForm
 from django.contrib.auth import login, authenticate
-from rest_framework.decorators import api_view, parser_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import ImageSerializer, TodoSerializer
-from todo import serializers
-from rest_framework import generics
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+from .serializers import ImageUploadSerializer, TodoSerializer
+from rest_framework import viewsets
+from .models import ImageUpload, TodoList
 
 
 @api_view(['GET'])
@@ -35,6 +23,7 @@ def todoOverview(request):
 @api_view(['GET'])
 def todoList(request):
     tasks = TodoList.objects.all()
+    # "many" tells here that there are many items to serializers
     serializer = TodoSerializer(tasks, many=True)
     return Response(serializer.data)
 
@@ -42,9 +31,8 @@ def todoList(request):
 @api_view(['POST'])
 def todoUpdate(request, pk):
     task = TodoList.objects.get(id=pk)
-    serializer = TodoSerializer(instance=task, data=request.data)
+    serializer = TodoSerializer(instance=task, data=request.data)  # instance?
     if serializer.is_valid():
-        print("****---------------------#####")
         serializer.save()
     return Response(serializer.data)
 
@@ -53,7 +41,6 @@ def todoUpdate(request, pk):
 def create(request):
     serializer = TodoSerializer(data=request.data)
     if serializer.is_valid():
-        print("****---------------------##### ADDDD")
         serializer.save()
     return Response(serializer.data)
 
@@ -62,14 +49,6 @@ def todoView(request):
     all_todo_items = TodoList.objects.all()
     return HttpResponseRedirect('/todolist')
     return render(request, 'todo.html', {'all': all_todo_items})
-
-
-'''def addTodo(request):
-    instanceTodoItem = TodoList()
-    instanceTodoItem.content = request.POST['insert']
-    instanceTodoItem.save()
-    all_todo_items = TodoList.objects.all()
-    return render(request, 'todo.html', {'all_items': all_todo_items})'''
 
 
 def deleteTodo(request, todo_id):
@@ -93,18 +72,6 @@ def update(request):
 def add(request):
     all_todo_items = TodoList.objects.all()
     return render(request, 'add.html', {'all_items': all_todo_items})
-
-
-'''def simple_upload(request):
-    if request.method == 'POST' and request.FILES['file']:
-        file = request.FILES['file']
-        fs = FileSystemStorage()
-        filename = fs.save(file.name, file)
-        uploaded_file_url = fs.url(filename)
-        return render(request, 'upload.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
-    return render(request, 'upload.html')'''
 
 
 def go_to_signin(request):
@@ -134,16 +101,6 @@ def logout(request):
     return render(request, 'logout.html', {})
 
 
-class ImageViewSet(APIView):
-    queryset = TodoList.objects.all()
-    serializer_class = TodoSerializer
-    parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, format=None):
-        serializer = ImageSerializer(data=request.data, instance=request)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ImageUploadViewSet(viewsets.ModelViewSet):
+    queryset = ImageUpload.objects.all()
+    serializer_class = ImageUploadSerializer
