@@ -12,10 +12,10 @@ from .models import ImageUpload, TodoList
 @api_view(['GET'])
 def todoOverview(request):
     api_urls = {
-        'List': '/todolist/',
-        'Create': '/todo-create/',
-        'Update': '/todo-update/<str:pk>',
-        'Delete': '/todo-delete/<str:pk>',
+        'List': '/list/',
+        'Create': '/create/',
+        'Update': '/update/<str:pk>',
+        'Delete': '/delete/<str:pk>',
     }
     return Response(api_urls)
 
