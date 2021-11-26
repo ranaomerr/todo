@@ -11,7 +11,7 @@ urlpatterns = [
     path('', views.todoOverview, name='todoOverview'),
     path('list/', views.todoList, name='todoList'),
     path('update/<str:pk>/', views.todoUpdate, name='update'),
-
+    path('delete/<str:pk>/', views.delete, name='delete'),
     path('create/', views.create, name='create'),
     path("imageupload/", include(router.urls)),
 

@@ -34,6 +34,7 @@ def todoUpdate(request, pk):
     serializer = TodoSerializer(instance=task, data=request.data)  # instance?
     if serializer.is_valid():
         serializer.save()
+    return HttpResponseRedirect('/list/')
     return Response(serializer.data)
 
 
@@ -43,6 +44,18 @@ def create(request):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def delete(request, pk):
+    to_del = TodoList.objects.filter(id=pk)
+    serializer = TodoSerializer(data=request.data)
+    if to_del:
+        to_del.delete()
+    if serializer.is_valid():
+        serializer.save()
+    return HttpResponseRedirect('/list/')
+    # return Response(serializer.data)
 
 
 def todoView(request):
